@@ -21,7 +21,7 @@ namespace ddgo
 		public void ConfigureServices(IServiceCollection services)
 		{
 			//services.AddControllers();
-			services.AddBot<TGBot>(options => { options.CredentialProvider = new ConfigurationCredentialProvider(Configuration); });
+			services.AddBot<TGBot>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
