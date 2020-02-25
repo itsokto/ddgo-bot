@@ -13,9 +13,5 @@
       <ProjectReference Include="..\..\ddgo-image-search-bot\duckduckgo-net\duckduckgo-net.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Properties\launchSettings.json" />
-    </ItemGroup>
-
 
 </Project>
