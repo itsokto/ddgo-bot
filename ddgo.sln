@@ -2,6 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ddgo", "ddgo\ddgo.csproj", "{186F9C79-907D-4769-A6BE-C14B0A0EA60F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ddgo-api", "ddgo-api", "{C71D8057-DBEA-4069-83E3-BA4EDF3B2B95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duckduckgo-net", "duckduckgo-net\duckduckgo-net.csproj", "{ED78CE52-EF27-4CDB-B196-24BDF9144DA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duckduckgo-net-tests", "duckduckgo-net-tests\duckduckgo-net-tests.csproj", "{FB6A1495-A279-437C-A119-7F7631C38ECA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +18,17 @@ Global
 		{186F9C79-907D-4769-A6BE-C14B0A0EA60F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{186F9C79-907D-4769-A6BE-C14B0A0EA60F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{186F9C79-907D-4769-A6BE-C14B0A0EA60F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED78CE52-EF27-4CDB-B196-24BDF9144DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED78CE52-EF27-4CDB-B196-24BDF9144DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED78CE52-EF27-4CDB-B196-24BDF9144DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED78CE52-EF27-4CDB-B196-24BDF9144DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB6A1495-A279-437C-A119-7F7631C38ECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB6A1495-A279-437C-A119-7F7631C38ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB6A1495-A279-437C-A119-7F7631C38ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB6A1495-A279-437C-A119-7F7631C38ECA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED78CE52-EF27-4CDB-B196-24BDF9144DA5} = {C71D8057-DBEA-4069-83E3-BA4EDF3B2B95}
+		{FB6A1495-A279-437C-A119-7F7631C38ECA} = {C71D8057-DBEA-4069-83E3-BA4EDF3B2B95}
 	EndGlobalSection
 EndGlobal

@@ -5,11 +5,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
+      <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.7.2" />
+      <PackageReference Include="Telegram.Bot" Version="15.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.7.2" />
+      <ProjectReference Include="..\..\ddgo-image-search-bot\duckduckgo-net\duckduckgo-net.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Properties\launchSettings.json" />
     </ItemGroup>
 
 

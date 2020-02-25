@@ -1,5 +1,8 @@
+using ddgo.Bot;
+using DuckDuckGo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
@@ -20,8 +23,15 @@ namespace ddgo
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			//services.AddControllers();
-			services.AddBot<TGBot>(options => { options.CredentialProvider = new ConfigurationCredentialProvider(Configuration); });
+			services.AddSingleton<DuckDuckGoApi>();
+
+			services.AddSingleton<IStorage, MemoryStorage>();
+
+			services.AddSingleton<UserState>();
+
+			services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorLogging>();
+
+			services.AddBot<DuckBot>(options => { options.CredentialProvider = new ConfigurationCredentialProvider(Configuration); });
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
