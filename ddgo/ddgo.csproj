@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\ddgo-image-search-bot\duckduckgo-net\duckduckgo-net.csproj" />
+      <ProjectReference Include="..\duckduckgo-net\duckduckgo-net.csproj" />
     </ItemGroup>
 
 
