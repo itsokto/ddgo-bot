@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duckduckgo-net", "duckduckg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duckduckgo-net-tests", "duckduckgo-net-tests\duckduckgo-net-tests.csproj", "{FB6A1495-A279-437C-A119-7F7631C38ECA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telegram", "Microsoft.Bot.Builder.Telegram\Microsoft.Bot.Builder.Telegram.csproj", "{92C0376F-2B8E-4F22-A5F7-1D6F3F20789B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{FB6A1495-A279-437C-A119-7F7631C38ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB6A1495-A279-437C-A119-7F7631C38ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB6A1495-A279-437C-A119-7F7631C38ECA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92C0376F-2B8E-4F22-A5F7-1D6F3F20789B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92C0376F-2B8E-4F22-A5F7-1D6F3F20789B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92C0376F-2B8E-4F22-A5F7-1D6F3F20789B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92C0376F-2B8E-4F22-A5F7-1D6F3F20789B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ED78CE52-EF27-4CDB-B196-24BDF9144DA5} = {C71D8057-DBEA-4069-83E3-BA4EDF3B2B95}

@@ -1,9 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Bot.Builder;
 using Telegram.Bot.Types;
 
-namespace ddgo.Bot
+namespace Microsoft.Bot.Builder.Telegram
 {
 	public class TelegramBotBase : ActivityHandler
 	{

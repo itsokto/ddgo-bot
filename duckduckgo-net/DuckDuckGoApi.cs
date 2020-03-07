@@ -13,7 +13,9 @@ namespace DuckDuckGo
 
 		public async Task<string> GetToken(string query, CancellationToken cancellationToken = default)
 		{
-			var response = await "https://duckduckgo.com".SetQueryParam("q", query).GetStringAsync(cancellationToken).ConfigureAwait(false);
+			var response = await "https://duckduckgo.com".SetQueryParam("q", query)
+														 .GetStringAsync(cancellationToken)
+														 .ConfigureAwait(false);
 			var math = VqdRegex.Match(response);
 			if (!math.Success)
 			{
@@ -41,7 +43,8 @@ namespace DuckDuckGo
 														  f = ",,,",
 														  p = (int) searchFilter
 													  })
-													  .GetJsonAsync<DuckDuckGoResponse<DuckImage>>(cancellationToken);
+													  .GetJsonAsync<DuckDuckGoResponse<DuckImage>>(cancellationToken)
+													  .ConfigureAwait(false);
 		}
 	}
 }

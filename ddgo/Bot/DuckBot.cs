@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DuckDuckGo;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Telegram;
 using Telegram.Bot.Requests;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.InlineQueryResults;
