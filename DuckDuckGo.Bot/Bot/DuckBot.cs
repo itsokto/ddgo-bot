@@ -10,7 +10,7 @@ using Telegram.Bot.Requests;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.InlineQueryResults;
 
-namespace ddgo.Bot
+namespace DuckDuckGo.Bot.Bot
 {
 	public class DuckBot : TelegramBot
 	{

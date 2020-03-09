@@ -1,4 +1,4 @@
-using ddgo.Bot;
+using DuckDuckGo.Bot.Bot;
 using DuckDuckGo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace ddgo
+namespace DuckDuckGo.Bot
 {
 	public class Startup
 	{
@@ -31,7 +31,7 @@ namespace ddgo
 
 			services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorLogging>();
 
-			services.AddBot<DuckBot>(options => { options.CredentialProvider = new ConfigurationCredentialProvider(Configuration); });
+			services.AddBot<Bot.DuckBot>(options => { options.CredentialProvider = new ConfigurationCredentialProvider(Configuration); });
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

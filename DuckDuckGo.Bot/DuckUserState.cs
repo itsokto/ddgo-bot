@@ -1,4 +1,4 @@
-﻿namespace ddgo
+﻿namespace DuckDuckGo.Bot
 {
 	public class DuckUserState
 	{

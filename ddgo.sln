@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ddgo", "ddgo\ddgo.csproj", "{186F9C79-907D-4769-A6BE-C14B0A0EA60F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckDuckGo.Bot", "DuckDuckGo.Bot\DuckDuckGo.Bot.csproj", "{186F9C79-907D-4769-A6BE-C14B0A0EA60F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ddgo-api", "ddgo-api", "{C71D8057-DBEA-4069-83E3-BA4EDF3B2B95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duckduckgo-net", "duckduckgo-net\duckduckgo-net.csproj", "{ED78CE52-EF27-4CDB-B196-24BDF9144DA5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckDuckGo", "DuckDuckGo\DuckDuckGo.csproj", "{ED78CE52-EF27-4CDB-B196-24BDF9144DA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duckduckgo-net-tests", "duckduckgo-net-tests\duckduckgo-net-tests.csproj", "{FB6A1495-A279-437C-A119-7F7631C38ECA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckDuckGo.Tests", "DuckDuckGo.Tests\DuckDuckGo.Tests.csproj", "{FB6A1495-A279-437C-A119-7F7631C38ECA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telegram", "Microsoft.Bot.Builder.Telegram\Microsoft.Bot.Builder.Telegram.csproj", "{92C0376F-2B8E-4F22-A5F7-1D6F3F20789B}"
 EndProject

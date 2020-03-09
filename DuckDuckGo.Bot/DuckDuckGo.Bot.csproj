@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\duckduckgo-net\duckduckgo-net.csproj" />
+      <ProjectReference Include="..\DuckDuckGo\DuckDuckGo.csproj" />
       <ProjectReference Include="..\Microsoft.Bot.Builder.Telegram\Microsoft.Bot.Builder.Telegram.csproj" />
     </ItemGroup>
 

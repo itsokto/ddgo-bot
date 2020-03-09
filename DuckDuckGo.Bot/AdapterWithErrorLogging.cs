@@ -5,7 +5,7 @@ using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace ddgo
+namespace DuckDuckGo.Bot
 {
 	public class AdapterWithErrorLogging : BotFrameworkHttpAdapter
 	{
