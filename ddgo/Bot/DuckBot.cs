@@ -43,7 +43,7 @@ namespace ddgo.Bot
 					Vqd = user.Vqd,
 					Next = user.Next
 				};
-				duckDuckGoResponse = await duckDuckGoResponse.Next(cancellationToken);
+				duckDuckGoResponse = await _duckDuckGoApi.Next(duckDuckGoResponse, cancellationToken);
 			}
 			else
 			{

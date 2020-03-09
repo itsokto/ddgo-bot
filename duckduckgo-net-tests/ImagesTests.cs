@@ -24,11 +24,11 @@ namespace Tests
 		[Fact]
 		public async Task SearchImagesNextTest()
 		{
-			var result = await _duckGoApi.Images("car");
-			var result1 = await result.Next();
+			var response = await _duckGoApi.Images("car");
+			var nextResponse = await _duckGoApi.Next(response);
 
-			Assert.NotNull(result1);
-			Assert.NotEmpty(result1.Results);
+			Assert.NotNull(nextResponse);
+			Assert.NotEmpty(nextResponse.Results);
 		}
 
 		[Fact]

@@ -9,7 +9,8 @@ namespace DuckDuckGo
 {
 	public class DuckDuckGoApi
 	{
-		private static readonly Regex VqdRegex = new Regex(@"vqd=\'([\d-]+)\'", RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private static readonly Regex VqdRegex = new Regex(@"vqd=\'(?<vqd>[\d-]+)\'",
+														   RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		public async Task<string> GetToken(string query, CancellationToken cancellationToken = default)
 		{
@@ -22,7 +23,7 @@ namespace DuckDuckGo
 				throw new InvalidOperationException("Can't parse vqd!");
 			}
 
-			return math.Groups[1].Value;
+			return math.Groups["vqd"].Value;
 		}
 
 		public async Task<DuckDuckGoResponse<DuckImage>> Images(string query,
@@ -45,6 +46,12 @@ namespace DuckDuckGo
 													  })
 													  .GetJsonAsync<DuckDuckGoResponse<DuckImage>>(cancellationToken)
 													  .ConfigureAwait(false);
+		}
+
+		public Task<DuckDuckGoResponse<T>> Next<T>(DuckDuckGoResponse<T> response, CancellationToken cancellationToken = default) where T : DuckImage
+		{
+			return $"https://duckduckgo.com/{response.Next}".SetQueryParam("vqd", response.Vqd)
+															.GetJsonAsync<DuckDuckGoResponse<T>>(cancellationToken);
 		}
 	}
 }
