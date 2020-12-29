@@ -1,5 +1,4 @@
 using DuckDuckGo.Bot.Bot;
-using DuckDuckGo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder;
@@ -31,7 +30,7 @@ namespace DuckDuckGo.Bot
 
 			services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorLogging>();
 
-			services.AddBot<Bot.DuckBot>(options => { options.CredentialProvider = new ConfigurationCredentialProvider(Configuration); });
+			services.AddBot<DuckBot>(options => { options.CredentialProvider = new ConfigurationCredentialProvider(Configuration); });
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
