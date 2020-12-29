@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DuckDuckGo;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Telegram;
 using Telegram.Bot.Requests;
@@ -35,41 +34,11 @@ namespace DuckDuckGo.Bot.Bot
 			var statePropertyAccessor = _userState.CreateProperty<DuckUserState>(nameof(DuckUserState));
 			var user = await statePropertyAccessor.GetAsync(turnContext, () => new DuckUserState(), cancellationToken);
 
-			DuckDuckGoResponse<DuckImage> duckDuckGoResponse;
-			if (inlineQuery.Query == user.Query)
-			{
-				duckDuckGoResponse = new DuckDuckGoResponse<DuckImage>
-				{
-					Vqd = user.Vqd,
-					Next = user.Next
-				};
-				duckDuckGoResponse = await _duckDuckGoApi.Next(duckDuckGoResponse, cancellationToken);
-			}
-			else
-			{
-				duckDuckGoResponse = await _duckDuckGoApi.Images(inlineQuery.Query, cancellationToken: cancellationToken);
-			}
+			var duckDuckGoResponse = await GetImagesAsync(inlineQuery, user, cancellationToken);
 
-			var images = FilterOnlyJpeg(duckDuckGoResponse.Results);
+			var answer = CreateAnswerInlineQuery(inlineQuery, duckDuckGoResponse);
 
-			var inlineQueryPhotos = images
-									.Take(50)
-									.Select((image, i) => new InlineQueryResultPhoto(i.ToString(), image.Image, image.Thumbnail))
-									.ToList();
-
-			if (string.IsNullOrWhiteSpace(inlineQuery.Offset))
-			{
-				inlineQuery.Offset = "0";
-			}
-
-			var offset = !string.IsNullOrWhiteSpace(duckDuckGoResponse.Next)
-				? (int.Parse(inlineQuery.Offset) + inlineQueryPhotos.Count).ToString()
-				: string.Empty;
-
-			var answer = new AnswerInlineQueryRequest(inlineQuery.Id, inlineQueryPhotos) { NextOffset = offset }.ToChannelData();
-
-			var reply = turnContext.Activity.CreateReply();
-			reply.ChannelData = answer;
+			var reply = turnContext.CreateBotReply(answer);
 
 			user.Vqd = duckDuckGoResponse.Vqd;
 			user.Next = duckDuckGoResponse.Next;
@@ -78,6 +47,43 @@ namespace DuckDuckGo.Bot.Bot
 			await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
 
 			await turnContext.SendActivityAsync(reply, cancellationToken);
+		}
+
+		private Task<DuckDuckGoResponse<DuckImage>> GetImagesAsync(InlineQuery inlineQuery, DuckUserState user, CancellationToken cancellationToken = default)
+		{
+			if (inlineQuery.Query != user.Query)
+			{
+				return _duckDuckGoApi.Images(inlineQuery.Query, cancellationToken: cancellationToken);
+			}
+
+			var duckDuckGoResponse = new DuckDuckGoResponse<DuckImage>
+			{
+				Vqd = user.Vqd,
+				Next = user.Next
+			};
+
+			return _duckDuckGoApi.Next(duckDuckGoResponse, cancellationToken);
+		}
+
+		private AnswerInlineQueryRequest CreateAnswerInlineQuery(InlineQuery inlineQuery, DuckDuckGoResponse<DuckImage> response)
+		{
+			var jpegImages = FilterOnlyJpeg(response.Results);
+
+			var inlineQueryPhotos = jpegImages
+				.Take(50)
+				.Select((image, i) => new InlineQueryResultPhoto(i.ToString(), image.Image, image.Thumbnail))
+				.ToList();
+
+			if (string.IsNullOrWhiteSpace(inlineQuery.Offset))
+			{
+				inlineQuery.Offset = "0";
+			}
+
+			var offset = !string.IsNullOrWhiteSpace(response.Next)
+				? (int.Parse(inlineQuery.Offset) + inlineQueryPhotos.Count).ToString()
+				: string.Empty;
+
+			return new AnswerInlineQueryRequest(inlineQuery.Id, inlineQueryPhotos) { NextOffset = offset };
 		}
 
 		private IEnumerable<DuckImage> FilterOnlyJpeg(IEnumerable<DuckImage> source)
