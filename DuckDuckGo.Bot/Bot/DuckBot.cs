@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DuckDuckGo.Bot.Services;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Telegram;
 using Telegram.Bot.Requests;
@@ -13,13 +12,12 @@ namespace DuckDuckGo.Bot.Bot
 {
 	public class DuckBot : TelegramBot
 	{
-		private readonly DuckDuckGoApi _duckDuckGoApi;
-
+		private readonly IImagesService _imagesService;
 		private readonly UserState _userState;
 
-		public DuckBot(DuckDuckGoApi duckDuckGoApi, UserState userState)
+		public DuckBot(IImagesService imagesService, UserState userState)
 		{
-			_duckDuckGoApi = duckDuckGoApi;
+			_imagesService = imagesService;
 			_userState = userState;
 		}
 
@@ -34,7 +32,7 @@ namespace DuckDuckGo.Bot.Bot
 			var statePropertyAccessor = _userState.CreateProperty<DuckUserState>(nameof(DuckUserState));
 			var user = await statePropertyAccessor.GetAsync(turnContext, () => new DuckUserState(), cancellationToken);
 
-			var duckDuckGoResponse = await GetImagesAsync(inlineQuery, user, cancellationToken);
+			var duckDuckGoResponse = await _imagesService.GetAsync(inlineQuery.Query, user, cancellationToken);
 
 			var answer = CreateAnswerInlineQuery(inlineQuery, duckDuckGoResponse);
 
@@ -49,27 +47,9 @@ namespace DuckDuckGo.Bot.Bot
 			await turnContext.SendActivityAsync(reply, cancellationToken);
 		}
 
-		private Task<DuckDuckGoResponse<DuckImage>> GetImagesAsync(InlineQuery inlineQuery, DuckUserState user, CancellationToken cancellationToken = default)
-		{
-			if (inlineQuery.Query != user.Query)
-			{
-				return _duckDuckGoApi.Images(inlineQuery.Query, cancellationToken: cancellationToken);
-			}
-
-			var duckDuckGoResponse = new DuckDuckGoResponse<DuckImage>
-			{
-				Vqd = user.Vqd,
-				Next = user.Next
-			};
-
-			return _duckDuckGoApi.Next(duckDuckGoResponse, cancellationToken);
-		}
-
 		private AnswerInlineQueryRequest CreateAnswerInlineQuery(InlineQuery inlineQuery, DuckDuckGoResponse<DuckImage> response)
 		{
-			var jpegImages = FilterOnlyJpeg(response.Results);
-
-			var inlineQueryPhotos = jpegImages
+			var inlineQueryPhotos = response.Results
 				.Take(50)
 				.Select((image, i) => new InlineQueryResultPhoto(i.ToString(), image.Image, image.Thumbnail))
 				.ToList();
@@ -84,19 +64,6 @@ namespace DuckDuckGo.Bot.Bot
 				: string.Empty;
 
 			return new AnswerInlineQueryRequest(inlineQuery.Id, inlineQueryPhotos) { NextOffset = offset };
-		}
-
-		private IEnumerable<DuckImage> FilterOnlyJpeg(IEnumerable<DuckImage> source)
-		{
-			foreach (var image in source)
-			{
-				var extension = Path.GetExtension(image.Image);
-
-				if (extension == ".jpg" || extension == ".jpeg")
-				{
-					yield return image;
-				}
-			}
 		}
 	}
 }

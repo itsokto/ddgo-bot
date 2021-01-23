@@ -1,4 +1,5 @@
 using DuckDuckGo.Bot.Bot;
+using DuckDuckGo.Bot.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder;
@@ -27,6 +28,8 @@ namespace DuckDuckGo.Bot
 			services.AddSingleton<IStorage, MemoryStorage>();
 
 			services.AddSingleton<UserState>();
+
+			services.AddSingleton<IImagesService, ImagesService>();
 
 			services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorLogging>();
 
