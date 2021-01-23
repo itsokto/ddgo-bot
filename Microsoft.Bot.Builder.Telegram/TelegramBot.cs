@@ -5,7 +5,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace Microsoft.Bot.Builder.Telegram
 {
-	public class TelegramBot : TelegramBotBase
+	public class TelegramBot : TelegramActivityHandler
 	{
 		/// <inheritdoc />
 		protected override Task OnUpdateAsync(ITurnContext turnContext, Update update, CancellationToken cancellationToken = default)

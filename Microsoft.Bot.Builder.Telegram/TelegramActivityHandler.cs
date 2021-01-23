@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace Microsoft.Bot.Builder.Telegram
 {
-	public class TelegramBotBase : ActivityHandler
+	public class TelegramActivityHandler : ActivityHandler
 	{
 		/// <inheritdoc />
 		public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default)
