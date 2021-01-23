@@ -9,14 +9,17 @@ namespace DuckDuckGo
 {
 	public class DuckDuckGoApi
 	{
-		private static readonly Regex VqdRegex = new Regex(@"vqd=\'(?<vqd>[\d-]+)\'",
+		private const string BaseUrl = "https://duckduckgo.com/";
+
+		private static readonly Regex VqdRegex = new(@"vqd=\'(?<vqd>[\d-]+)\'",
 														   RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		public async Task<string> GetToken(string query, CancellationToken cancellationToken = default)
 		{
-			var response = await "https://duckduckgo.com".SetQueryParam("q", query)
-														 .GetStringAsync(cancellationToken)
-														 .ConfigureAwait(false);
+			var response = await BaseUrl.SetQueryParam("q", query)
+											 .GetStringAsync(cancellationToken)
+											 .ConfigureAwait(false);
+
 			var math = VqdRegex.Match(response);
 			if (!math.Success)
 			{
@@ -36,22 +39,15 @@ namespace DuckDuckGo
 				vqd = await GetToken(query, cancellationToken);
 			}
 
-			return await "https://duckduckgo.com/i.js".SetQueryParams(new
-													  {
-														  o = "json",
-														  q = query,
-														  vqd,
-														  f = ",,,",
-														  p = (int) searchFilter
-													  })
-													  .GetJsonAsync<DuckDuckGoResponse<DuckImage>>(cancellationToken)
-													  .ConfigureAwait(false);
+			return await $"{BaseUrl}i.js".SetQueryParams(new { o = "json", q = query, vqd, f = ",,,", p = (int) searchFilter })
+										 .GetJsonAsync<DuckDuckGoResponse<DuckImage>>(cancellationToken)
+										 .ConfigureAwait(false);
 		}
 
 		public Task<DuckDuckGoResponse<T>> Next<T>(DuckDuckGoResponse<T> response, CancellationToken cancellationToken = default) where T : DuckImage
 		{
-			return $"https://duckduckgo.com/{response.Next}".SetQueryParam("vqd", response.Vqd)
-															.GetJsonAsync<DuckDuckGoResponse<T>>(cancellationToken);
+			return $"{BaseUrl}{response.Next}".SetQueryParam("vqd", response.Vqd)
+											  .GetJsonAsync<DuckDuckGoResponse<T>>(cancellationToken);
 		}
 	}
 }
