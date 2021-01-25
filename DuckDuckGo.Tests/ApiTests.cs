@@ -1,14 +1,15 @@
+using System;
 using System.Threading.Tasks;
-using DuckDuckGo;
+using Flurl.Http.Testing;
 using Xunit;
 
-namespace Tests
+namespace DuckDuckGo.Tests
 {
-	public class ImagesTests
+	public class ApiTests : BaseTest
 	{
 		private readonly DuckDuckGoApi _duckGoApi;
 
-		public ImagesTests()
+		public ApiTests()
 		{
 			_duckGoApi = new DuckDuckGoApi();
 		}
@@ -16,9 +17,25 @@ namespace Tests
 		[Fact]
 		public async Task GetTokenTest()
 		{
+			var html = ReadFile("get_token_car.html");
+
+			using var httpTest = new HttpTest();
+			httpTest.RespondWith(html);
+
 			var token = await _duckGoApi.GetToken("car");
 
-			Assert.NotNull(token);
+			Assert.Equal("3-46082209034006461627445001051878587260-103201150309019047502164315555969820387", token);
+		}
+
+		[Fact]
+		public async Task GetTokenThrowsInvalidOperationExceptionTest()
+		{
+			var html = ReadFile("get_token_car_without_vqd.html");
+
+			using var httpTest = new HttpTest();
+			httpTest.RespondWith(html);
+
+			await Assert.ThrowsAsync<InvalidOperationException>(() => _duckGoApi.GetToken("car"));
 		}
 
 		[Fact]
