@@ -39,6 +39,25 @@ namespace DuckDuckGo.Tests
 		}
 
 		[Fact]
+		public async Task GetImagesTest()
+		{
+			var html = ReadFile("get_token_car.html");
+			var json = ReadFile("get_images_car.json");
+
+			using var httpTest = new HttpTest();
+			httpTest.RespondWith(html);
+			httpTest.RespondWith(json);
+
+			var response = await _duckGoApi.Images("car");
+
+			Assert.NotNull(response);
+			Assert.Equal("i.js?q=car&o=json&p=-1&s=100&u=bing&f=,,,&l=us-en", response.Next);
+			Assert.Equal("car", response.Query);
+			Assert.NotEmpty(response.Results);
+			Assert.Equal("3-46081923812621494983278470627847170412-103201150309019047502164315555969820387", response.Vqd);
+		}
+
+		[Fact]
 		public async Task SearchImagesNextTest()
 		{
 			var response = await _duckGoApi.Images("car");
@@ -46,15 +65,6 @@ namespace DuckDuckGo.Tests
 
 			Assert.NotNull(nextResponse);
 			Assert.NotEmpty(nextResponse.Results);
-		}
-
-		[Fact]
-		public async Task SearchImagesTest()
-		{
-			var result = await _duckGoApi.Images("car");
-
-			Assert.NotNull(result);
-			Assert.NotEmpty(result.Results);
 		}
 	}
 }
