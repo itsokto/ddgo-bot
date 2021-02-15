@@ -3,6 +3,7 @@ using DuckDuckGo.Bot.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
@@ -20,12 +21,19 @@ namespace DuckDuckGo.Bot
 
 		public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddSingleton<DuckDuckGoApi>();
 
-			services.AddSingleton<IStorage, MemoryStorage>();
+			services.AddSingleton<IStorage>(
+				new CosmosDbPartitionedStorage(
+					new CosmosDbPartitionedStorageOptions
+					{
+						CosmosDbEndpoint = Configuration.GetValue<string>("CosmosDbEndpoint"),
+						AuthKey = Configuration.GetValue<string>("CosmosDbAuthKey"),
+						DatabaseId = Configuration.GetValue<string>("CosmosDbDatabaseId"),
+						ContainerId = Configuration.GetValue<string>("CosmosDbContainerId")
+					}));
 
 			services.AddSingleton<UserState>();
 
@@ -33,10 +41,12 @@ namespace DuckDuckGo.Bot
 
 			services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorLogging>();
 
-			services.AddBot<DuckBot>(options => { options.CredentialProvider = new ConfigurationCredentialProvider(Configuration); });
+			services.AddBot<DuckBot>(options =>
+			{
+				options.CredentialProvider = new ConfigurationCredentialProvider(Configuration);
+			});
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
@@ -47,10 +57,6 @@ namespace DuckDuckGo.Bot
 			app.UseHttpsRedirection();
 
 			app.UseRouting();
-
-			//app.UseAuthorization();
-
-			//app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 			app.UseBotFramework();
 		}
