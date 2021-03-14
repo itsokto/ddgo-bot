@@ -23,6 +23,8 @@ namespace DuckDuckGo.Bot
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddApplicationInsightsTelemetry();
+
 			services.AddSingleton<DuckDuckGoApi>();
 
 			services.AddSingleton<IStorage>(
