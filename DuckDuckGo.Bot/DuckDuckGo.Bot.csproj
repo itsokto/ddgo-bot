@@ -5,19 +5,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="DuckDuckGo" Version="0.1.0" />
       <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
       <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="3.0.5" />
       <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.12.1" />
       <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.12.1" />
+      <PackageReference Include="Microsoft.Bot.Builder.Telegram" Version="0.2.0" />
       <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
       <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
-      <PackageReference Include="Telegram.Bot" Version="15.7.1" />
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\DuckDuckGo\DuckDuckGo.csproj" />
-      <ProjectReference Include="..\Microsoft.Bot.Builder.Telegram\Microsoft.Bot.Builder.Telegram.csproj" />
-    </ItemGroup>
-
 
 </Project>
