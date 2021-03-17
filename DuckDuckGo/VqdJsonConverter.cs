@@ -1,36 +1,28 @@
 using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DuckDuckGo
 {
-	public class VqdJsonConverter : JsonConverter
+	public class VqdJsonConverter : JsonConverter<string>
 	{
-		/// <inheritdoc />
-		public override bool CanWrite { get; } = false;
-
 		public override bool CanConvert(Type objectType)
 		{
 			return objectType.IsAssignableFrom(typeof(string));
 		}
 
-		/// <inheritdoc />
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+		public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
-			throw new NotImplementedException();
+			var jsonDocument = JsonDocument.ParseValue(ref reader);
+			var jsonProperty = jsonDocument.RootElement.EnumerateObject().FirstOrDefault();
+
+			return jsonProperty.Value.GetString();
 		}
 
-		/// <inheritdoc />
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
 		{
-			if (reader.TokenType != JsonToken.StartObject)
-			{
-				return null;
-			}
-
-			var jObject = JObject.Load(reader);
-
-			return jObject.First.First.ToString();
+			throw new NotImplementedException();
 		}
 	}
 }

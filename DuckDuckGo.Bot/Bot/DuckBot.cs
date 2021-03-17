@@ -32,14 +32,14 @@ namespace DuckDuckGo.Bot.Bot
 			var statePropertyAccessor = _userState.CreateProperty<DuckUserState>(nameof(DuckUserState));
 			var user = await statePropertyAccessor.GetAsync(turnContext, () => new DuckUserState(), cancellationToken);
 
-			var duckDuckGoResponse = await _imagesService.GetAsync(inlineQuery.Query, user, cancellationToken);
+			var duckResponse = await _imagesService.GetAsync(inlineQuery.Query, user, cancellationToken);
 
-			var answer = CreateAnswerInlineQuery(inlineQuery, duckDuckGoResponse);
+			var answer = CreateAnswerInlineQuery(inlineQuery, duckResponse);
 
 			var reply = turnContext.CreateBotReply(answer);
 
-			user.Vqd = duckDuckGoResponse.Vqd;
-			user.Next = duckDuckGoResponse.Next;
+			user.Vqd = duckResponse.Vqd;
+			user.Next = duckResponse.Next;
 			user.Query = inlineQuery.Query;
 
 			await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
@@ -47,7 +47,7 @@ namespace DuckDuckGo.Bot.Bot
 			await turnContext.SendActivityAsync(reply, cancellationToken);
 		}
 
-		private AnswerInlineQueryRequest CreateAnswerInlineQuery(InlineQuery inlineQuery, DuckDuckGoResponse<DuckImage> response)
+		private AnswerInlineQueryRequest CreateAnswerInlineQuery(InlineQuery inlineQuery, DuckResponse<DuckImage> response)
 		{
 			var inlineQueryPhotos = response.Results
 				.Take(50)

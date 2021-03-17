@@ -1,6 +1,6 @@
 namespace DuckDuckGo
 {
-	public enum SearchFilter
+	public enum DuckSearchFilter
 	{
 		Off = -1,
 

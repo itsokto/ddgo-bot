@@ -8,38 +8,38 @@ namespace DuckDuckGo.Bot.Services
 {
 	public class ImagesService : IImagesService
 	{
-		private readonly DuckDuckGoApi _duckDuckGoApi;
+		private readonly IDuckApi _duckDuckGoApi;
 
-		public ImagesService(DuckDuckGoApi duckDuckGoApi)
+		public ImagesService(IDuckApi duckDuckGoApi)
 		{
 			_duckDuckGoApi = duckDuckGoApi;
 		}
 
-		public async Task<DuckDuckGoResponse<DuckImage>> GetAsync(string query, DuckUserState state,
+		public async Task<DuckResponse<DuckImage>> GetAsync(string query, DuckUserState state,
 			CancellationToken cancellationToken = default)
 		{
-			DuckDuckGoResponse<DuckImage> duckDuckGoResponse;
+			DuckResponse<DuckImage> duckResponse;
 
 			if (query != state.Query)
 			{
-				duckDuckGoResponse = await _duckDuckGoApi.Images(query, cancellationToken: cancellationToken);
+				duckResponse = await _duckDuckGoApi.GetImagesAsync(query, cancellationToken: cancellationToken);
 			}
 			else
 			{
-				duckDuckGoResponse = new DuckDuckGoResponse<DuckImage>
+				duckResponse = new DuckResponse<DuckImage>
 				{
 					Vqd = state.Vqd,
 					Next = state.Next
 				};
 
-				duckDuckGoResponse = await _duckDuckGoApi.Next(duckDuckGoResponse, cancellationToken);
+				duckResponse = await _duckDuckGoApi.NextAsync(duckResponse, cancellationToken);
 			}
 
 			// Photo must be in jpeg format.
 			// https://core.telegram.org/bots/api#inlinequeryresultphoto
-			duckDuckGoResponse.Results = FilterImages(duckDuckGoResponse.Results, ".jpg", ".jpeg").ToList();
+			duckResponse.Results = FilterImages(duckResponse.Results, ".jpg", ".jpeg").ToList();
 
-			return duckDuckGoResponse;
+			return duckResponse;
 		}
 
 		private IEnumerable<DuckImage> FilterImages(IEnumerable<DuckImage> source, params string[] extensions)

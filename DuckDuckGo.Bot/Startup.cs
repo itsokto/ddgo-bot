@@ -25,7 +25,7 @@ namespace DuckDuckGo.Bot
 		{
 			services.AddApplicationInsightsTelemetry();
 
-			services.AddSingleton<DuckDuckGoApi>();
+			services.AddSingleton(_ => new DuckApiBuilder().Build());
 
 			services.AddSingleton<IStorage>(
 				new CosmosDbPartitionedStorage(

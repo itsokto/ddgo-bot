@@ -1,25 +1,25 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace DuckDuckGo
 {
 	public class DuckImage
 	{
-		[JsonProperty("height")]
+		[JsonPropertyName("height")]
 		public long Height { get; set; }
 
-		[JsonProperty("image")]
+		[JsonPropertyName("image")]
 		public string Image { get; set; }
 
-		[JsonProperty("url")]
+		[JsonPropertyName("url")]
 		public string Url { get; set; }
 
-		[JsonProperty("thumbnail")]
+		[JsonPropertyName("thumbnail")]
 		public string Thumbnail { get; set; }
 
-		[JsonProperty("title")]
+		[JsonPropertyName("title")]
 		public string Title { get; set; }
 
-		[JsonProperty("width")]
+		[JsonPropertyName("width")]
 		public long Width { get; set; }
 	}
 }

@@ -1,17 +1,16 @@
 using System;
 using System.Threading.Tasks;
-using Flurl.Http.Testing;
 using Xunit;
 
 namespace DuckDuckGo.Tests
 {
 	public class ApiTests : BaseTest
 	{
-		private readonly DuckDuckGoApi _duckGoApi;
+		private readonly IDuckApi _duckGoApi;
 
 		public ApiTests()
 		{
-			_duckGoApi = new DuckDuckGoApi();
+			_duckGoApi = new DuckApiBuilder().Build();
 		}
 
 		[Fact]
@@ -19,10 +18,7 @@ namespace DuckDuckGo.Tests
 		{
 			var html = ReadFile("get_token_car.html");
 
-			using var httpTest = new HttpTest();
-			httpTest.RespondWith(html);
-
-			var token = await _duckGoApi.GetToken("car");
+			var token = await _duckGoApi.GetTokenAsync("car");
 
 			Assert.Equal("3-46082209034006461627445001051878587260-103201150309019047502164315555969820387", token);
 		}
@@ -32,10 +28,7 @@ namespace DuckDuckGo.Tests
 		{
 			var html = ReadFile("get_token_car_without_vqd.html");
 
-			using var httpTest = new HttpTest();
-			httpTest.RespondWith(html);
-
-			await Assert.ThrowsAsync<InvalidOperationException>(() => _duckGoApi.GetToken("car"));
+			await Assert.ThrowsAsync<InvalidOperationException>(() => _duckGoApi.GetTokenAsync("car"));
 		}
 
 		[Fact]
@@ -44,11 +37,7 @@ namespace DuckDuckGo.Tests
 			var html = ReadFile("get_token_car.html");
 			var json = ReadFile("get_images_car.json");
 
-			using var httpTest = new HttpTest();
-			httpTest.RespondWith(html);
-			httpTest.RespondWith(json);
-
-			var response = await _duckGoApi.Images("car");
+			var response = await _duckGoApi.GetImagesAsync("car");
 
 			Assert.NotNull(response);
 			Assert.Equal("i.js?q=car&o=json&p=-1&s=100&u=bing&f=,,,&l=us-en", response.Next);
@@ -60,8 +49,8 @@ namespace DuckDuckGo.Tests
 		[Fact]
 		public async Task SearchImagesNextTest()
 		{
-			var response = await _duckGoApi.Images("car");
-			var nextResponse = await _duckGoApi.Next(response);
+			var response = await _duckGoApi.GetImagesAsync("car");
+			var nextResponse = await _duckGoApi.NextAsync(response);
 
 			Assert.NotNull(nextResponse);
 			Assert.NotEmpty(nextResponse.Results);

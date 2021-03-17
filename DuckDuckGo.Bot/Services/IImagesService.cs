@@ -5,6 +5,6 @@ namespace DuckDuckGo.Bot.Services
 {
 	public interface IImagesService
 	{
-		Task<DuckDuckGoResponse<DuckImage>> GetAsync(string query, DuckUserState state, CancellationToken cancellationToken = default);
+		Task<DuckResponse<DuckImage>> GetAsync(string query, DuckUserState state, CancellationToken cancellationToken = default);
 	}
 }

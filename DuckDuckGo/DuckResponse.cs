@@ -1,21 +1,21 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace DuckDuckGo
 {
-	public class DuckDuckGoResponse<T>
+	public class DuckResponse<T>
 	{
 		[JsonConverter(typeof(VqdJsonConverter))]
-		[JsonProperty("vqd")]
+		[JsonPropertyName("vqd")]
 		public string Vqd { get; set; }
 
-		[JsonProperty("next")]
+		[JsonPropertyName("next")]
 		public string Next { get; set; }
 
-		[JsonProperty("results")]
+		[JsonPropertyName("results")]
 		public IList<T> Results { get; set; }
 
-		[JsonProperty("query")]
+		[JsonPropertyName("query")]
 		public string Query { get; set; }
 	}
 }
