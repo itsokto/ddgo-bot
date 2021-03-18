@@ -3,26 +3,29 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DuckDuckGo.Bot.Policies;
 
 namespace DuckDuckGo.Bot.Services
 {
 	public class ImagesService : IImagesService
 	{
-		private readonly IDuckApi _duckDuckGoApi;
+		private readonly IDuckApi _duckApi;
 
-		public ImagesService(IDuckApi duckDuckGoApi)
+		public ImagesService(IDuckApi duckApi)
 		{
-			_duckDuckGoApi = duckDuckGoApi;
+			_duckApi = duckApi;
 		}
 
 		public async Task<DuckResponse<DuckImage>> GetAsync(string query, DuckUserState state,
-			CancellationToken cancellationToken = default)
+															CancellationToken cancellationToken = default)
 		{
 			DuckResponse<DuckImage> duckResponse;
 
 			if (query != state.Query)
 			{
-				duckResponse = await _duckDuckGoApi.GetImagesAsync(query, cancellationToken: cancellationToken);
+				duckResponse = await DuckPolicy.RetryOnInvalidToken<DuckResponse<DuckImage>>()
+											   .ExecuteAsync(ct => _duckApi.GetImagesAsync(query, cancellationToken: ct),
+															 cancellationToken);
 			}
 			else
 			{
@@ -32,7 +35,7 @@ namespace DuckDuckGo.Bot.Services
 					Next = state.Next
 				};
 
-				duckResponse = await _duckDuckGoApi.NextAsync(duckResponse, cancellationToken);
+				duckResponse = await _duckApi.NextAsync(duckResponse, cancellationToken);
 			}
 
 			// Photo must be in jpeg format.
