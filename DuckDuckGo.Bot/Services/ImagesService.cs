@@ -35,7 +35,8 @@ namespace DuckDuckGo.Bot.Services
 					Next = state.Next
 				};
 
-				duckResponse = await _duckApi.NextAsync(duckResponse, cancellationToken);
+				duckResponse = await DuckPolicy.FallbackOnInvalidToken<DuckImage>()
+											   .ExecuteAsync(ct => _duckApi.NextAsync(duckResponse, ct), cancellationToken);
 			}
 
 			if (duckResponse.Results != null)
