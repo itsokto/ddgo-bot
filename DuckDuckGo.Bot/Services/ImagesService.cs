@@ -23,7 +23,7 @@ namespace DuckDuckGo.Bot.Services
 
 			if (query != state.Query)
 			{
-				duckResponse = await DuckPolicy.RetryOnInvalidToken<DuckResponse<DuckImage>>()
+				duckResponse = await DuckPolicy.FallbackOnInvalidToken<DuckImage>()
 											   .ExecuteAsync(ct => _duckApi.GetImagesAsync(query, cancellationToken: ct),
 															 cancellationToken);
 			}
@@ -38,9 +38,12 @@ namespace DuckDuckGo.Bot.Services
 				duckResponse = await _duckApi.NextAsync(duckResponse, cancellationToken);
 			}
 
-			// Photo must be in jpeg format.
-			// https://core.telegram.org/bots/api#inlinequeryresultphoto
-			duckResponse.Results = FilterImages(duckResponse.Results, ".jpg", ".jpeg").ToList();
+			if (duckResponse.Results != null)
+			{
+				// Photo must be in jpeg format.
+				// https://core.telegram.org/bots/api#inlinequeryresultphoto
+				duckResponse.Results = FilterImages(duckResponse.Results, ".jpg", ".jpeg").ToList();
+			}
 
 			return duckResponse;
 		}

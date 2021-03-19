@@ -22,7 +22,8 @@ namespace DuckDuckGo.Bot.Bot
 		}
 
 		/// <inheritdoc />
-		protected override async Task OnInlineQueryAsync(ITurnContext turnContext, InlineQuery inlineQuery, CancellationToken cancellationToken = default)
+		protected override async Task OnInlineQueryAsync(ITurnContext turnContext, InlineQuery inlineQuery,
+														 CancellationToken cancellationToken = default)
 		{
 			if (string.IsNullOrWhiteSpace(inlineQuery.Query))
 			{
@@ -49,21 +50,31 @@ namespace DuckDuckGo.Bot.Bot
 
 		private AnswerInlineQueryRequest CreateAnswerInlineQuery(InlineQuery inlineQuery, DuckResponse<DuckImage> response)
 		{
-			var inlineQueryPhotos = response.Results
-				.Take(50)
-				.Select((image, i) => new InlineQueryResultPhoto(i.ToString(), image.Image, image.Thumbnail))
-				.ToList();
-
-			if (string.IsNullOrWhiteSpace(inlineQuery.Offset))
+			if (response.Results == null || !response.Results.Any() && string.IsNullOrWhiteSpace(response.Next))
 			{
-				inlineQuery.Offset = "0";
+				return new AnswerInlineQueryRequest(inlineQuery.Id, Enumerable.Empty<InlineQueryResultBase>())
+				{
+					NextOffset = string.Empty
+				};
 			}
 
-			var offset = !string.IsNullOrWhiteSpace(response.Next)
-				? (int.Parse(inlineQuery.Offset) + inlineQueryPhotos.Count).ToString()
-				: string.Empty;
+			var inlineQueryPhotos = response.Results.Take(50)
+											.Select((image, i) => new InlineQueryResultPhoto(i.ToString(), image.Image, image.Thumbnail))
+											.ToList();
+
+			var offset = GetOffset(inlineQuery.Offset, inlineQueryPhotos.Count);
 
 			return new AnswerInlineQueryRequest(inlineQuery.Id, inlineQueryPhotos) { NextOffset = offset };
+		}
+
+		private string GetOffset(string queryOffset, long count)
+		{
+			if (string.IsNullOrWhiteSpace(queryOffset))
+			{
+				queryOffset = "0";
+			}
+
+			return long.TryParse(queryOffset, out var offset) ? (offset + count).ToString() : string.Empty;
 		}
 	}
 }
