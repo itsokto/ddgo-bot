@@ -43,9 +43,9 @@ namespace DuckDuckGo.Bot.Bot
 			user.Next = duckResponse.Next;
 			user.Query = inlineQuery.Query;
 
-			await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
-
 			await turnContext.SendActivityAsync(reply, cancellationToken);
+
+			await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
 		}
 
 		private AnswerInlineQueryRequest CreateAnswerInlineQuery(InlineQuery inlineQuery, DuckResponse<DuckImage> response)
