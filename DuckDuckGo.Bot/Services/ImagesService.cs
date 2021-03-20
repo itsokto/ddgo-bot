@@ -21,22 +21,17 @@ namespace DuckDuckGo.Bot.Services
 		{
 			DuckResponse<DuckImage> duckResponse;
 
-			if (query != state.Query)
+			if (query == state.Query && !string.IsNullOrWhiteSpace(state.Next))
 			{
 				duckResponse = await DuckPolicy.FallbackOnInvalidToken<DuckImage>()
-											   .ExecuteAsync(ct => _duckApi.GetImagesAsync(query, cancellationToken: ct),
+											   .ExecuteAsync(ct => _duckApi.NextAsync<DuckImage>(state.Next, state.Vqd, ct),
 															 cancellationToken);
 			}
 			else
 			{
-				duckResponse = new DuckResponse<DuckImage>
-				{
-					Vqd = state.Vqd,
-					Next = state.Next
-				};
-
 				duckResponse = await DuckPolicy.FallbackOnInvalidToken<DuckImage>()
-											   .ExecuteAsync(ct => _duckApi.NextAsync(duckResponse, ct), cancellationToken);
+											   .ExecuteAsync(ct => _duckApi.GetImagesAsync(query, cancellationToken: ct),
+															 cancellationToken);
 			}
 
 			if (duckResponse.Results != null)

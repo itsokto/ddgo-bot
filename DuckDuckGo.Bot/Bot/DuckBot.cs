@@ -50,7 +50,7 @@ namespace DuckDuckGo.Bot.Bot
 
 		private AnswerInlineQueryRequest CreateAnswerInlineQuery(InlineQuery inlineQuery, DuckResponse<DuckImage> response)
 		{
-			if (response.Results == null || !response.Results.Any() && string.IsNullOrWhiteSpace(response.Next))
+			if (response.Results == null || !response.Results.Any())
 			{
 				return new AnswerInlineQueryRequest(inlineQuery.Id, Enumerable.Empty<InlineQueryResultBase>())
 				{
@@ -62,7 +62,7 @@ namespace DuckDuckGo.Bot.Bot
 											.Select((image, i) => new InlineQueryResultPhoto(i.ToString(), image.Image, image.Thumbnail))
 											.ToList();
 
-			var offset = GetOffset(inlineQuery.Offset, inlineQueryPhotos.Count);
+			var offset = string.IsNullOrWhiteSpace(response.Next) ? string.Empty : GetOffset(inlineQuery.Offset, inlineQueryPhotos.Count);
 
 			return new AnswerInlineQueryRequest(inlineQuery.Id, inlineQueryPhotos) { NextOffset = offset };
 		}
