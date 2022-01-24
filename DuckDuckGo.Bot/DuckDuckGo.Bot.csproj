@@ -11,7 +11,7 @@
       <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.13.1" />
       <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.13.1" />
       <PackageReference Include="Microsoft.Bot.Builder.Telegram" Version="0.2.0" />
-      <PackageReference Include="Polly" Version="7.2.2" />
+      <PackageReference Include="Polly" Version="7.2.3" />
       <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
       <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
     </ItemGroup>
